@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class BlackjackGameTest {
@@ -12,15 +14,25 @@ class BlackjackGameTest {
 
     @Test
     void sumCards() {
-        assertEquals(11, BlackjackGame.findSumCards(new String[]{"5H", "6S"}));
-        assertEquals(25, BlackjackGame.findSumCards(new String[]{"KD", "QC", "5H"}));
+        assertEquals(11, BlackjackGame.findSumCards(List.of(new String[]{"5H", "6S"})));
+        assertEquals(25, BlackjackGame.findSumCards(List.of(new String[]{"KD", "QC", "5H"})));
     }
 
     @Test
     void findScore() {
-        assertArrayEquals(new int[]{11}, BlackjackGame.findScore(new String[]{"5H", "6S"}));
-        assertArrayEquals(new int[]{25}, BlackjackGame.findScore(new String[]{"KD", "QC", "5H"}));
-        assertArrayEquals(new int[]{26}, BlackjackGame.findScore(new String[]{"KD", "QC", "5H", "AS"}));
-        assertArrayEquals(new int[]{8,18}, BlackjackGame.findScore(new String[]{"AH", "7H"}));
+        assertArrayEquals(new int[]{11}, BlackjackGame.findScore(List.of(new String[]{"5H", "6S"})));
+        assertArrayEquals(new int[]{25}, BlackjackGame.findScore(List.of(new String[]{"KD", "QC", "5H"})));
+        assertArrayEquals(new int[]{26}, BlackjackGame.findScore(List.of(new String[]{"KD", "QC", "5H", "AS"})));
+        assertArrayEquals(new int[]{8,18}, BlackjackGame.findScore(List.of(new String[]{"AH", "7H"})));
+        assertArrayEquals(new int[]{19}, BlackjackGame.findScore(List.of(new String[]{"AH", "8H", "0S"})));
+    }
+
+    @Test
+    void getResult() {
+        assertEquals("Bust", BlackjackGame.getResult(new int[] {24}));
+        assertEquals("Blackjack", BlackjackGame.getResult(new int[] {21}));
+        assertEquals("Blackjack", BlackjackGame.getResult(new int[] {11,21}));
+        assertNull(BlackjackGame.getResult(new int[]{8}));
+        assertNull(BlackjackGame.getResult(new int[]{8,18}));
     }
 }

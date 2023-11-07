@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
@@ -6,24 +8,53 @@ public class BlackjackGame {
 
     private static final String deckId = DeckManager.newDeck();
     public static void main(String[] args) {
-        System.out.println("Welcome to Blackjack!");
-        String[] cards = DeckManager.drawCards(deckId, 2);
-        System.out.println(Arrays.toString(cards));
-        System.out.println("Total score: " + Arrays.toString(findScore(cards)));
+        playGame();
     }
 
-    public static int[] findScore(String[] cards) {
+    public static void playGame() {
+        System.out.println("Welcome to Blackjack!");
+        String[] cardsArr = DeckManager.drawCards(deckId, 2);
+        List<String> cards = new ArrayList<>(Arrays.asList(cardsArr));
+        String result;
+
+        while (true) {
+            System.out.println("Your cards: " + cards);
+            int[] score = findScore(cards);
+            System.out.println("Total score: " + Arrays.toString(score));
+
+            result = getResult(score);
+
+            if (result == null) {
+                String newCard = DeckManager.drawCards(deckId, 1)[0];
+                cards.add(newCard);
+            } else break;
+        }
+
+        System.out.println(result);
+    }
+
+    public static String getResult(int[] score) {
+
+        if (score[score.length - 1] == 21)
+            return "Blackjack";
+        else if (score[0] > 21)
+            return "Bust";
+
+        return null;
+    }
+
+    public static int[] findScore(List<String> cards) {
         int sumCards = findSumCards(cards);
 
-        if (sumCards <= 21 && containsAce(cards))
+        if (sumCards <= 11 && containsAce(cards))
             return new int[]{sumCards, sumCards + 10};
 
         return new int[]{sumCards};
     }
 
-    public static int findSumCards(String[] cards) {
-        return Arrays.stream(cards)
-                .map(card -> card.charAt(0))
+    public static int findSumCards(List<String> cards) {
+        return Arrays.stream(cards.toArray())
+                .map(card -> String.valueOf(card).charAt(0))
                 .map(BlackjackGame::findValue)
                 .mapToInt(Integer::intValue)
                 .sum();
@@ -37,7 +68,7 @@ public class BlackjackGame {
         };
     }
 
-    public static boolean containsAce(String[] cards) {
+    public static boolean containsAce(List<String> cards) {
         return String.join("", cards).contains("A");
     }
 }
