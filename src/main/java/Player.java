@@ -7,17 +7,29 @@ public class Player {
     public String name;
     public boolean dealer;
     public List<String> cards;
+    public int score;
 
-    public Player(boolean isDealer, String[] cardsArr) {
+
+    public Player(boolean isDealer) {
+        score = 0;
         dealer = isDealer;
-        cards = new ArrayList<>(Arrays.asList(cardsArr));
         if (dealer)
             name = "Dealer";
         else {
             Scanner consoleInput = new Scanner(System.in);
+            System.out.println();
             System.out.println("Please enter your name");
             name = consoleInput.nextLine();
         }
+    }
+
+    public void setCards(String[] cardsArr) {
+        cards = new ArrayList<>(Arrays.asList(cardsArr));
+    }
+
+    public void wins() {
+        System.out.println(name + " Wins Round");
+        score++;
     }
 
     public boolean hit(int score) {

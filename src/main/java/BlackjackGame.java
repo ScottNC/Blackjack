@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
@@ -10,14 +12,43 @@ public class BlackjackGame {
     public static void main(String[] args) {
         System.out.println();
         System.out.println("Welcome to Blackjack!");
-        System.out.println();
+        Scanner consoleInput = new Scanner(System.in);
 
-        Player human = new Player(false, DeckManager.drawCards(deckId, 2));
-        Player dealer = new Player(true, DeckManager.drawCards(deckId, 2));
+        Player human = new Player(false);
+        Player dealer = new Player(true);
 
-        String humanResult = playGame(human);
+        String again;
+
+        do {
+            System.out.println();
+            playGame(human, dealer);
+            again = "";
+
+            while (!again.equals("Y") && !again.equals("N")) {
+                System.out.println("Would you like to play again? (Y/N)");
+                again = consoleInput.nextLine().toUpperCase();
+            }
+        } while (!again.equals("N"));
+
         System.out.println();
-        String dealerResult = playGame(dealer);
+        System.out.println("Final Score:");
+        System.out.println(human.name + " - " + human.score);
+        System.out.println(dealer.name + " - " + dealer.score);
+
+        if (human.score == dealer.score)
+            System.out.println("It's A Tie");
+        else if (human.score > dealer.score)
+            System.out.println("The Winner Is " + human.name);
+        else
+            System.out.println("The Winner Is " + dealer.name);
+    }
+
+    public static void playGame(Player human, Player dealer) {
+        human.setCards(DeckManager.drawCards(deckId, 2));
+        dealer.setCards(DeckManager.drawCards(deckId, 2));
+        String humanResult = playSingleGame(human);
+        System.out.println();
+        String dealerResult = playSingleGame(dealer);
 
         System.out.println();
         System.out.println(human.name + " result: " + humanResult);
@@ -29,13 +60,11 @@ public class BlackjackGame {
         else if (humanResult.equals("Bust") || dealerResult.equals("Blackjack")
                 || !humanResult.equals("Blackjack") && !dealerResult.equals("Bust")
                 && (parseInt(dealerResult) > parseInt(humanResult)))
-            System.out.println(dealer.name + " Wins");
-        else
-            System.out.println(human.name + " Wins");
+            dealer.wins();
+        else human.wins();
     }
 
-
-    public static String playGame(Player player) {
+    public static String playSingleGame(Player player) {
         String name = player.name;
         List<String> cards = player.cards;
         String result;
@@ -45,7 +74,7 @@ public class BlackjackGame {
 
         while (true) {
             System.out.println(name + " cards: " + cards);
-            int[] Result = findResult(cards);
+            int[] Result = findTotalValue(cards);
             System.out.println(name + " Result: " + Arrays.toString(Result));
 
             int highestResult = Result[Result.length - 1];
@@ -75,7 +104,7 @@ public class BlackjackGame {
         return String.valueOf(Result);
     }
 
-    public static int[] findResult(List<String> cards) {
+    public static int[] findTotalValue(List<String> cards) {
         int sumCards = findSumCards(cards);
 
         if (sumCards <= 11 && containsAce(cards))

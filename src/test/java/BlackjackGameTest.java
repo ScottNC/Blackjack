@@ -19,12 +19,12 @@ class BlackjackGameTest {
     }
 
     @Test
-    void findScore() {
-        assertArrayEquals(new int[]{11}, BlackjackGame.findScore(List.of(new String[]{"5H", "6S"})));
-        assertArrayEquals(new int[]{25}, BlackjackGame.findScore(List.of(new String[]{"KD", "QC", "5H"})));
-        assertArrayEquals(new int[]{26}, BlackjackGame.findScore(List.of(new String[]{"KD", "QC", "5H", "AS"})));
-        assertArrayEquals(new int[]{8,18}, BlackjackGame.findScore(List.of(new String[]{"AH", "7H"})));
-        assertArrayEquals(new int[]{19}, BlackjackGame.findScore(List.of(new String[]{"AH", "8H", "0S"})));
+    void findTotalValue() {
+        assertArrayEquals(new int[]{11}, BlackjackGame.findTotalValue(List.of(new String[]{"5H", "6S"})));
+        assertArrayEquals(new int[]{25}, BlackjackGame.findTotalValue(List.of(new String[]{"KD", "QC", "5H"})));
+        assertArrayEquals(new int[]{26}, BlackjackGame.findTotalValue(List.of(new String[]{"KD", "QC", "5H", "AS"})));
+        assertArrayEquals(new int[]{8,18}, BlackjackGame.findTotalValue(List.of(new String[]{"AH", "7H"})));
+        assertArrayEquals(new int[]{19}, BlackjackGame.findTotalValue(List.of(new String[]{"AH", "8H", "0S"})));
     }
 
     @Test
