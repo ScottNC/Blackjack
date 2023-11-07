@@ -55,6 +55,8 @@ public class BlackjackGame {
     public static void playGame(Player human, Player dealer) {
         human.setCards(DeckManager.drawCards(deckId, 2));
         dealer.setCards(DeckManager.drawCards(deckId, 2));
+        System.out.println("Dealer Cards: " + displayList(List.of(dealer.cards.get(0), "??")));
+        System.out.println();
         String humanResult = playSingleGame(human);
         System.out.println();
         String dealerResult = playSingleGame(dealer);
