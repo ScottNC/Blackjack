@@ -13,7 +13,7 @@ public class DeckManager {
     public static String newDeck() {
         String deckResponse = makeURLRequest("/new/shuffle/?deck_count=1");
         Deck deck = new Gson().fromJson(deckResponse, Deck.class);
-        return deck.getDeckId();
+        return deck.deck_id;
     }
 
     /*
@@ -26,8 +26,8 @@ public class DeckManager {
                 .mapToObj(i -> makeURLRequest("/" + deckId + "/draw/?count=1"))
                 .map(response -> {
                     Cards cards = new Gson().fromJson(response, Cards.class);
-                    return Arrays.stream(cards.getCards())
-                            .map(Card::getCode)
+                    return Arrays.stream(cards.cards)
+                            .map(card -> card.code)
                             .toArray(String[]::new);
                 })
                 .flatMap(Arrays::stream)
@@ -65,25 +65,14 @@ public class DeckManager {
 
     private static class Deck {
         private String deck_id;
-
-        public String getDeckId() {
-            return deck_id;
-        }
     }
 
     private static class Cards {
         private Card[] cards;
 
-        public Card[] getCards() {
-            return cards;
-        }
     }
 
     private static class Card {
         private String code;
-
-        public String getCode() {
-            return code;
-        }
     }
 }
