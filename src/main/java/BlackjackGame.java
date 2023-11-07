@@ -1,62 +1,61 @@
-import java.io.BufferedReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
 public class BlackjackGame {
 
     private static final String deckId = DeckManager.newDeck();
+
     public static void main(String[] args) {
-        playGame();
+        System.out.println("Welcome to Blackjack!");
+
+        Player human = new Player(false, DeckManager.drawCards(deckId, 2));
+        Player dealer = new Player(true, DeckManager.drawCards(deckId, 2));
+
+        String humanScore = playGame(human);
+        String dealerScore = playGame(dealer);
+
+        System.out.println(human.name + " result: " + humanScore);
+        System.out.println(dealer.name + " result: " + dealerScore);
     }
 
-    public static void playGame() {
-        Scanner consoleInput = new Scanner(System.in);
-        System.out.println("Welcome to Blackjack!");
-        String[] cardsArr = DeckManager.drawCards(deckId, 2);
-        List<String> cards = new ArrayList<>(Arrays.asList(cardsArr));
+
+    public static String playGame(Player player) {
+        String name = player.name;
+        List<String> cards = player.cards;
         String result;
 
         while (true) {
-            System.out.println("Your cards: " + cards);
+            System.out.println(name + " cards: " + cards);
             int[] score = findScore(cards);
-            System.out.println("Total score: " + Arrays.toString(score));
+            System.out.println(name + " score: " + Arrays.toString(score));
 
-            result = getResult(score);
+            int highestScore = score[score.length - 1];
+            result = getResult(highestScore);
 
-            if (result == null) {
-                String move = "N";
+            if (result.length() <= 2) {
+                boolean isHit = player.hit(highestScore);
 
-                while (!move.equals("H") && !move.equals("S")) {
-                    System.out.println("H: to Hit  S: to Stop");
-                    move = consoleInput.nextLine().toUpperCase();
-                }
-
-                if (move.equals("H")) {
+                if (isHit) {
                     String newCard = DeckManager.drawCards(deckId, 1)[0];
                     cards.add(newCard);
-                } else {
-                    result = String.valueOf(score[score.length - 1]);
-                    break;
-                }
+                } else break;
 
             } else break;
         }
 
-        System.out.println("Your result: " + result);
+        return result;
     }
 
-    public static String getResult(int[] score) {
+    public static String getResult(int score) {
 
-        if (score[score.length - 1] == 21)
+        if (score == 21)
             return "Blackjack";
-        else if (score[0] > 21)
+        else if (score > 21)
             return "Bust";
 
-        return null;
+        return String.valueOf(score);
     }
 
     public static int[] findScore(List<String> cards) {

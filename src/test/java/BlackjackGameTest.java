@@ -29,10 +29,9 @@ class BlackjackGameTest {
 
     @Test
     void getResult() {
-        assertEquals("Bust", BlackjackGame.getResult(new int[] {24}));
-        assertEquals("Blackjack", BlackjackGame.getResult(new int[] {21}));
-        assertEquals("Blackjack", BlackjackGame.getResult(new int[] {11,21}));
-        assertNull(BlackjackGame.getResult(new int[]{8}));
-        assertNull(BlackjackGame.getResult(new int[]{8,18}));
+        assertEquals("Bust", BlackjackGame.getResult(24));
+        assertEquals("Blackjack", BlackjackGame.getResult(21));
+        assertEquals("8", BlackjackGame.getResult(8));
+        assertEquals("8", BlackjackGame.getResult(18));
     }
 }
