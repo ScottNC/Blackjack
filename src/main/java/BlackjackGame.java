@@ -1,6 +1,8 @@
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
 
@@ -12,6 +14,7 @@ public class BlackjackGame {
     }
 
     public static void playGame() {
+        Scanner consoleInput = new Scanner(System.in);
         System.out.println("Welcome to Blackjack!");
         String[] cardsArr = DeckManager.drawCards(deckId, 2);
         List<String> cards = new ArrayList<>(Arrays.asList(cardsArr));
@@ -25,12 +28,25 @@ public class BlackjackGame {
             result = getResult(score);
 
             if (result == null) {
-                String newCard = DeckManager.drawCards(deckId, 1)[0];
-                cards.add(newCard);
+                String move = "N";
+
+                while (!move.equals("H") && !move.equals("S")) {
+                    System.out.println("H: to Hit  S: to Stop");
+                    move = consoleInput.nextLine().toUpperCase();
+                }
+
+                if (move.equals("H")) {
+                    String newCard = DeckManager.drawCards(deckId, 1)[0];
+                    cards.add(newCard);
+                } else {
+                    result = String.valueOf(score[score.length - 1]);
+                    break;
+                }
+
             } else break;
         }
 
-        System.out.println(result);
+        System.out.println("Your result: " + result);
     }
 
     public static String getResult(int[] score) {
