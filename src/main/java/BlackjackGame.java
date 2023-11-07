@@ -8,16 +8,30 @@ public class BlackjackGame {
     private static final String deckId = DeckManager.newDeck();
 
     public static void main(String[] args) {
+        System.out.println();
         System.out.println("Welcome to Blackjack!");
+        System.out.println();
 
         Player human = new Player(false, DeckManager.drawCards(deckId, 2));
         Player dealer = new Player(true, DeckManager.drawCards(deckId, 2));
 
-        String humanScore = playGame(human);
-        String dealerScore = playGame(dealer);
+        String humanResult = playGame(human);
+        System.out.println();
+        String dealerResult = playGame(dealer);
 
-        System.out.println(human.name + " result: " + humanScore);
-        System.out.println(dealer.name + " result: " + dealerScore);
+        System.out.println();
+        System.out.println(human.name + " result: " + humanResult);
+        System.out.println(dealer.name + " result: " + dealerResult);
+        System.out.println();
+
+        if (humanResult.equals(dealerResult))
+            System.out.println("Tie");
+        else if (humanResult.equals("Bust") || dealerResult.equals("Blackjack")
+                || !humanResult.equals("Blackjack") && !dealerResult.equals("Bust")
+                && (parseInt(dealerResult) > parseInt(humanResult)))
+            System.out.println(dealer.name + " Wins");
+        else
+            System.out.println(human.name + " Wins");
     }
 
 
@@ -26,16 +40,19 @@ public class BlackjackGame {
         List<String> cards = player.cards;
         String result;
 
+        System.out.println(name + "'s Turn");
+        System.out.println();
+
         while (true) {
             System.out.println(name + " cards: " + cards);
-            int[] score = findScore(cards);
-            System.out.println(name + " score: " + Arrays.toString(score));
+            int[] Result = findResult(cards);
+            System.out.println(name + " Result: " + Arrays.toString(Result));
 
-            int highestScore = score[score.length - 1];
-            result = getResult(highestScore);
+            int highestResult = Result[Result.length - 1];
+            result = getResult(highestResult);
 
             if (result.length() <= 2) {
-                boolean isHit = player.hit(highestScore);
+                boolean isHit = player.hit(highestResult);
 
                 if (isHit) {
                     String newCard = DeckManager.drawCards(deckId, 1)[0];
@@ -48,17 +65,17 @@ public class BlackjackGame {
         return result;
     }
 
-    public static String getResult(int score) {
+    public static String getResult(int Result) {
 
-        if (score == 21)
+        if (Result == 21)
             return "Blackjack";
-        else if (score > 21)
+        else if (Result > 21)
             return "Bust";
 
-        return String.valueOf(score);
+        return String.valueOf(Result);
     }
 
-    public static int[] findScore(List<String> cards) {
+    public static int[] findResult(List<String> cards) {
         int sumCards = findSumCards(cards);
 
         if (sumCards <= 11 && containsAce(cards))
