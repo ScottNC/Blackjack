@@ -27,6 +27,8 @@ public class BlackjackGame {
                 System.out.println("Would you like to play again? (Y/N)");
                 again = consoleInput.nextLine().toUpperCase();
             }
+
+            DeckManager.reshuffle(deckId);
         } while (!again.equals("N"));
 
         System.out.println();

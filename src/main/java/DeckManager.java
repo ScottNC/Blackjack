@@ -23,7 +23,7 @@ public class DeckManager {
      */
     public static String[] drawCards(String deckId, int count) {
         return IntStream.range(0, count)
-                .mapToObj(i -> makeURLRequest("/" + deckId + "/draw/?count=1"))
+                .mapToObj(i -> makeURLRequest("/%s/draw/?count=1".formatted(deckId)))
                 .map(response -> {
                     Cards cards = new Gson().fromJson(response, Cards.class);
                     return Arrays.stream(cards.cards)
@@ -32,6 +32,10 @@ public class DeckManager {
                 })
                 .flatMap(Arrays::stream)
                 .toArray(String[]::new);
+    }
+
+    public static void reshuffle(String deckId) {
+        makeURLRequest("/%s/shuffle/?deck_count=1".formatted(deckId));
     }
 
     private static String makeURLRequest(String endpoint) {
