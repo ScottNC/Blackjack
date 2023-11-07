@@ -43,7 +43,11 @@ public class BlackjackGame {
     }
 
     public static String displayList(List<String> cards) {
-        return String.join(", ", cards);
+        return String.join(", ", cards)
+                .replace('H', '♡')
+                .replace('S', '♤')
+                .replace('C', '♧')
+                .replace('D', '♢');
     }
 
     public static String displayArray(int[] arr) {
