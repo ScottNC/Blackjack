@@ -42,6 +42,16 @@ public class BlackjackGame {
             System.out.println("The Winner Is " + dealer.name);
     }
 
+    public static String displayList(List<String> cards) {
+        return String.join(", ", cards);
+    }
+
+    public static String displayArray(int[] arr) {
+        return String.join(" or ", Arrays.stream(arr)
+                .mapToObj(String::valueOf)
+                .toArray(String[]::new));
+    }
+
     public static void playGame(Player human, Player dealer) {
         human.setCards(DeckManager.drawCards(deckId, 2));
         dealer.setCards(DeckManager.drawCards(deckId, 2));
@@ -72,11 +82,11 @@ public class BlackjackGame {
         System.out.println();
 
         while (true) {
-            System.out.println(name + " cards: " + cards);
-            int[] Result = findTotalValue(cards);
-            System.out.println(name + " Result: " + Arrays.toString(Result));
+            System.out.println(name + " cards: " + displayList(cards));
+            int[] allResults = findTotalValue(cards);
+            System.out.println(name + " Result: " + displayArray(allResults));
 
-            int highestResult = Result[Result.length - 1];
+            int highestResult = allResults[allResults.length - 1];
             result = getResult(highestResult);
 
             if (result.length() <= 2) {
